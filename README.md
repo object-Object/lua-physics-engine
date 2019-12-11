@@ -16,6 +16,9 @@ Here's what I want to implement, but haven't yet.
 * Constraints - mainly non-penetration (i.e. collisions)
 * More object types
 
+## Known bugs
+* When a simulation is started with two circles just touching, there is a crash related to GJK returning an invalid simplex. I don't know why.
+
 ## Dependencies
 These are the libraries I use for this project.
 * Vector library from [this Code Review Stack Exchange page](https://codereview.stackexchange.com/a/107237), heavily modified
