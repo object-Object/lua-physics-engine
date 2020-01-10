@@ -15,6 +15,7 @@ Rigid body physics engine written in Lua. Very work-in-progress.
 
 ## Soon(tm) features
 * More constraints (e.g. chains)
+* Friction
 * More object types
 
 ## Known bugs
