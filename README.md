@@ -9,15 +9,19 @@ As of right now, here's what I've implemented.
 * Quite a few different simulation files
 * Collision detection using GJK
 * Finding the minimum translation vector using EPA
-* Visualization of the polytope that EPA generates
+* Non-penetration constraints (i.e. collisions)
+* Static objects
+* A few debug tools/readouts
+* Many useful vector functions in the vector library
 
 ## WIP features
 Here's what I want to implement, but haven't yet.
-* Constraints - mainly non-penetration (i.e. collisions)
+* More constraints (e.g. chains)
 * More object types
 
 ## Known bugs
-* When a simulation is started with two circles just touching, there is a crash related to GJK returning an invalid simplex. I don't know why.
+* Box-box interaction sometimes ends in boxes being thrown at very high speeds
+* Small amounts of energy are being added in each collison because it doesn't do continuous detection
 
 ## Dependencies
 These are the libraries I use for this project.
