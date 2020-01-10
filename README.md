@@ -23,7 +23,7 @@ Rigid body physics engine written in Lua. Very work-in-progress.
 * Stacking boxes doesn't work
 
 ## Dependencies
-These are all included in the files.
+These are all included in the files except for the Draw Library.
 * Vector library from [this Code Review Stack Exchange page](https://codereview.stackexchange.com/a/107237), heavily modified
 * [Typical](https://github.com/hoelzro/lua-typical)
 * Draw Library in [Touch Lua +](https://apps.apple.com/us/app/touch-lua/id692368612) (paid)
