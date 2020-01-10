@@ -1,3 +1,5 @@
+local doCollisionSolving=true
+
 -- requires --
 local Vector=require("vector")
 local logger=require("logger")
@@ -20,23 +22,10 @@ defaultColor=draw.black
 selectColor={red=1,green=0,blue=0,alpha=0.3}
 draw.darkgreen={red=40/255,green=184/255,blue=0,alpha=1}
 drawScale=true -- whether or not to draw a scale
-initialWarpRate=0.2 -- default warp rate
+initialWarpRate=1 -- default warp rate
 drawVectors=true --whether or not to draw force, net force, and velocity arrows
-
--- sim --
-require("sims/collision2") -- file containing object and force definitions to be run
-
--- local constants --
-local dt=1/60
-minWarpRate=0.1 -- min time warp
-maxWarpRate=1e8 -- max time warp
-
--- variables --
-local t=0
-local currentTime
-warpRate=initialWarpRate -- time warp multiplier
-clearScreen=true --whether or not to clear the screen each frame
-objects={}
+exit=false -- modules can set this to stop the program
+exitMessage="Exiting." -- modules can set this to print a message on exit
 
 -- placeholder functions --
 customInits={}
@@ -47,11 +36,28 @@ customTouchMoves={}
 customTouchEnds={}
 initNoFocusOffset=initNoFocusOffset or function() return Vector(0,0) end
 
+-- sim --
+require("sims/collision3") -- file containing object and force definitions to be run
+
+-- local constants --
+local dt=1/240
+minWarpRate=0.1 -- min time warp
+maxWarpRate=1e8 -- max time warp
+
+-- variables --
+local t=0
+local currentTime
+warpRate=initialWarpRate -- time warp multiplier
+clearScreen=true --whether or not to clear the screen each frame
+objects={}
+
 -- components --
 --require("components/OrbitalControls")
 --require("components/WarpAndZoom")
-require("components/CollisionDisplay")
+if not doCollisionSolving then require("components/CollisionDisplay") end
 require("components/Nametags")
+--require("components/FrameTimeInfo")
+require("components/ObjectInfo")
 
 -- functions --
 function fixY(y)
@@ -81,10 +87,10 @@ local function init()
     currentTime=getTime()
 end
 
-local function doEvents()
+local function doEvents(dt)
     draw.doevents()
     for _,f in ipairs(customEvents) do
-        f()
+        f(dt)
     end
 end
 
@@ -92,24 +98,23 @@ local function tick(deltaTime)
     deltaTime=deltaTime*warpRate
     -- dynamic
     for _,object in pairs(objects) do
-        if not object.shape.static then
-            object.forces={}
-            doEvents()
-            computeForces(object)
+        object.forces={}
+        doEvents(deltaTime)
+        computeForces(object)
 
-            -- linear velocity
-            integrate(object,t,deltaTime)
+        -- linear velocity
+        integrate(object,t,deltaTime)
 
-            -- angular velocity
-            local torque=0
-            for _,f in ipairs(object.forces) do
-                torque=torque+f.f.x*f.r.y-f.f.y*f.r.x
-            end
-            local angularAcceleration=torque/object.shape.inertia
-            object.angularVelocity=object.angularVelocity+angularAcceleration*deltaTime
-            object.angle=object.angle+object.angularVelocity*deltaTime
+        -- angular velocity
+        local torque=0
+        for _,f in ipairs(object.forces) do
+            torque=torque+f.f.x*f.r.y-f.f.y*f.r.x
         end
+        local angularAcceleration=torque*object.shape.invInertia
+        object.angularVelocity=object.angularVelocity+angularAcceleration*deltaTime
+        object.angle=object.angle+object.angularVelocity*deltaTime
     end
+    if doCollisionSolving then solveIntersects(deltaTime) end
 end
 
 local function clearInstantForces()
@@ -124,7 +129,7 @@ function getRadius(o)
     local r
     if o.shape.type=="box" then
         r=math.max(o.shape.width,o.shape.height)
-    elseif o.shape.type=="circle" then
+    elseif o.shape.type=="circle" or o.shape.type=="polygon" then
         r=o.shape.radius
     end
     return r
@@ -169,4 +174,9 @@ while true do
     render.render()
 
     clearInstantForces()
+
+    if exit then
+        print(exitMessage)
+        break
+    end
 end

@@ -4,6 +4,18 @@ function table.clone(org)
     return {table.unpack(org)}
 end
 
+function table.deepClone(org)
+    local out={}
+    if type(org)=="table" then
+        for k,v in pairs(org) do out[k]=table.deepClone(v) end
+    elseif type(org)=="vector" then
+        out=Vector(org.x,org.y)
+    else
+        out=org
+    end
+    return out
+end
+
 function table.multiInsert(t,...)
     for k,v in pairs({...}) do
         table.insert(t,v)

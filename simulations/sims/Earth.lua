@@ -7,7 +7,7 @@ local screenSize=2*moonOrbit+2*5e7
 
 backgroundColor=draw.black
 defaultColor=draw.white
-scale=1/30000
+scale=1/1
 drawScale=false
 drawVectors=false
 
@@ -34,5 +34,5 @@ function initObjects()
     initCircle{x=0, y=0, m=5.98e24, r=6.38e6, color=draw.darkgreen, name="Earth"}
     initCircle{x=0, y=moonOrbit, m=7.35e22, r=1.74e6, Vx=math.sqrt((G*5.98e24)/moonOrbit), color=draw.lightgray, name="Moon"}
 
-    initBox{x=0, y=6.38e6+1e5, Vx=7845.597, w=5, h=2, name="Spaceship", angle=math.rad(30), focus=true, fill=false, other={controlled=true}}
+    initBox{x=0, y=6.38e6+300, Vx=7845.597, w=5, h=2, name="Spaceship", focus=true, fill=false, other={controlled=true}}
 end

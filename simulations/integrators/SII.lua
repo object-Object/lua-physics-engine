@@ -7,7 +7,7 @@ function integrate(object,t,dt)
     for _,force in pairs(object.forces) do
         netForce=netForce+force.f
     end
-    local linearAcceleration=netForce/object.shape.mass
+    local linearAcceleration=netForce*object.shape.invMass
     object.linearVelocity=object.linearVelocity+linearAcceleration*dt
     object.position=object.position+object.linearVelocity*dt
 end

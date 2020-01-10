@@ -42,7 +42,7 @@ render.init=function()
     draw.setscreen(1)
     draw.clear(backgroundColor)
     width,height=draw.getport()
-    print(width,height)
+    print("Dimensions: ",width,height)
     draw.setfont("Helvetica",5)
     draw.setlinestyle(2,"butt")
 
@@ -113,6 +113,12 @@ render.render=function()
             else
                 draw.circle(posX,fixY(posY),r,object.shape.color)
             end
+        elseif object.shape.type=="polygon" then
+            if object.shape.fill then
+                draw.fillpolygon(posX,fixY(posY),r,object.shape.sides,object.angle,object.shape.color)
+            else
+                draw.polygon(posX,fixY(posY),r,object.shape.sides,object.angle,object.shape.color)
+            end
         end
         if r<0.5 then
             -- if this crashes, look for a color table that doesn't have colors defined as {red=x, green=x, blue=x}
@@ -132,8 +138,8 @@ render.render=function()
             for _,force in pairs(object.forces) do
                 posX=object.position.x*scale+force.r.x*scale+focusOffset.x
                 posY=object.position.y*scale+force.r.y*scale+focusOffset.y
-                endX=posX+force.f.x/object.shape.mass*(scale/7)
-                endY=posY+force.f.y/object.shape.mass*(scale/7)
+                endX=posX+force.f.x*object.shape.invMass*(scale/7)
+                endY=posY+force.f.y*object.shape.invMass*(scale/7)
                 draw.arrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(force.f.y,force.f.x),draw.red)
                 netForce=netForce+force.f
                 avgX=avgX+posX
@@ -142,8 +148,8 @@ render.render=function()
             end
             posX=avgX/count
             posY=avgY/count
-            endX=posX+netForce.x/object.shape.mass*(scale/7)
-            endY=posY+netForce.y/object.shape.mass*(scale/7)
+            endX=posX+netForce.x*object.shape.invMass*(scale/7)
+            endY=posY+netForce.y*object.shape.invMass*(scale/7)
             draw.arrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(netForce.y,netForce.x),draw.darkgreen)
         end
     end
