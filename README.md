@@ -20,8 +20,9 @@ Here's what I want to implement, but haven't yet.
 * More object types
 
 ## Known bugs
-* Box-box interaction sometimes ends in boxes being thrown at very high speeds
+* Box-box interaction sometimes results in boxes being thrown at very high speeds (see sims/collision4 for an example)
 * Small amounts of energy are being added in each collison because it doesn't do continuous detection
+* Stacking boxes doesn't work
 
 ## Dependencies
 These are the libraries I use for this project.
