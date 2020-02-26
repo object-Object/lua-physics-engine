@@ -4,7 +4,7 @@ require("utils")
 local EPATolerance=0.0001
 -- tolerances for sequential impulses
 local SIIterationLimit=5
-local SITolerance=0.01
+local SITolerance=0.1
 
 -- support functions --
 
@@ -405,7 +405,10 @@ function solveIntersects(deltaTime)
         intersect.constraintMass=(-n*-n)*m1
         +(n*n)*m2
         +r1:cross(n)^2*I1
-        +-r2:cross(n)^2*I2
+        +(-r2):cross(n)^2*I2
+
+        --pause("intersects loop")
+        --_=true -- make the pause stop at the right spot
     end
     for i=1,SIIterationLimit do
         local numberConverged=0
@@ -450,18 +453,20 @@ function solveIntersects(deltaTime)
             +angular1:mag()
             +angular2:mag()
 
-            local res=1
-
-            local lambda=(-JV+res*b)/intersect.constraintMass
+            local lambda=(-JV+b)/intersect.constraintMass
 
             local dv1=(-n*lambda)*m1
             local dvrot1=(lambda*r1:cross(n))*I1
             local dv2=(n*lambda)*m2
             local dvrot2=(lambda*-r2:cross(n))*I2
-            object1.linearVelocity=object1.linearVelocity+dv1
-            object2.linearVelocity=object2.linearVelocity+dv2
-            object1.angularVelocity=object1.angularVelocity+dvrot1
-            object2.angularVelocity=object2.angularVelocity+dvrot2
+
+            pause("SI iteration")
+
+            local res=1.00
+            object1.linearVelocity=object1.linearVelocity+dv1*res
+            object2.linearVelocity=object2.linearVelocity+dv2*res
+            object1.angularVelocity=object1.angularVelocity+dvrot1*res
+            object2.angularVelocity=object2.angularVelocity+dvrot2*res
 
             if dv1:mag()<SITolerance and dvrot1<SITolerance and dv2:mag()<SITolerance and dvrot2<SITolerance then
                 -- this intersect hasn't changed much

@@ -66,7 +66,7 @@ render.init=function()
     draw.setfont("Helvetica",20)
 end
 
-render.waitTouch=function()
+render.waitInput=function()
     draw.beginframe()
     draw.setfont("Helvetica",30)
     local x,y=draw.stringsize("Tap to start")
@@ -120,9 +120,12 @@ render.render=function()
                 draw.polygon(posX,fixY(posY),r,object.shape.sides,object.angle,object.shape.color)
             end
         end
-        if r<0.5 then
+        if r<0.5 and highlightSmallObjects==true then
             -- if this crashes, look for a color table that doesn't have colors defined as {red=x, green=x, blue=x}
-            local c={red=object.shape.color.red, green=object.shape.color.green, blue=object.shape.color.blue, alpha=0.5}
+            local c=table.deepClone(object.shape.color)
+            c[4]=nil
+            c.a=nil
+            c.alpha=0.5
             draw.fillcircle(posX,fixY(posY),8,c)
         end
         if selectedObject==k then

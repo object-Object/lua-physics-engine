@@ -1,11 +1,22 @@
 local doCollisionSolving=true
+local debug=false
 
 -- requires --
 local Vector=require("vector")
 local logger=require("logger")
-local render=require("render")
+local render
+if debug then
+    render=require("debugRender")
+else
+    render=require("render")
+end
 local getTime=require("getTime")
 require("collision")
+if debug then
+    require("debugger")
+else
+    pause=function() end
+end
 require("vectorUtils")
 require("utils")
 require("integrators/SII") -- type of integration
@@ -13,6 +24,7 @@ require("integrators/SII") -- type of integration
 require("print_r")
 
 -- global constants --
+c=299792458 -- speed of light
 g=Vector(0,-9.81) -- stage gravity
 G=6.674*10^-11 -- universal gravitational constant
 k=9e9 -- electrostatic constant
@@ -26,6 +38,7 @@ initialWarpRate=1 -- default warp rate
 drawVectors=true --whether or not to draw force, net force, and velocity arrows
 exit=false -- modules can set this to stop the program
 exitMessage="Exiting." -- modules can set this to print a message on exit
+highlightSmallObjects=true -- put a translucent circle around very small objects
 
 -- placeholder functions --
 customInits={}
@@ -37,7 +50,7 @@ customTouchEnds={}
 initNoFocusOffset=initNoFocusOffset or function() return Vector(0,0) end
 
 -- sim --
-require("sims/collision3") -- file containing object and force definitions to be run
+require("sims/collision4") -- file containing object and force definitions to be run
 
 -- local constants --
 local dt=1/240
@@ -156,7 +169,7 @@ end)
 initObjects()
 init()
 render.render()
-render.waitTouch()
+render.waitInput()
 
 currentTime=getTime()
 while true do

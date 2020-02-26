@@ -7,6 +7,7 @@ local screenSize=2*moonOrbit+2*3e9
 
 scale=1/(screenSize/screenPixels) --pixels/metre
 drawScale=false
+highlightSmallObjects=false
 
 function computeForces(o)
     for _,o2 in pairs(objects) do
@@ -31,6 +32,6 @@ function initObjects()
     initCircle{x=1.2e9-2.66e8, y=1e10, m=1.17e21, r=5.847e5, Vx=0, Vy=-1700+4697.46, hideVectors=true, color={0.4,0.4,0.4,1}, name="Umbriel"}
     initCircle{x=1.2e9, y=1e10+1.299e8, m=6.6e19, r=2.357e5, Vx=6722.02, Vy=-1700, hideVectors=true, color={0.3,0.3,0.3,1}, name="Miranda"}
 
-    initCircle{x=0, y=0, m=5.98e24, r=6.38e6, hideVectors=true, color=draw.darkgreen, name="Earth"}
-    initCircle{x=0, y=moonOrbit, m=7.35e22, r=1.74e6, Vx=math.sqrt((G*5.98e24)/moonOrbit), hideVectors=true, name="Moon"}
+    initCircle{x=1.2e9, y=0, m=5.98e24, r=6.38e6, hideVectors=true, color=draw.darkgreen, name="Earth"}
+    initCircle{x=1.2e9, y=moonOrbit, m=7.35e22, r=1.74e6, Vx=math.sqrt((G*5.98e24)/moonOrbit), hideVectors=true, name="Moon"}
 end

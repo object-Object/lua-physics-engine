@@ -15,6 +15,6 @@ function computeForces(o)
 end
 
 function initObjects()
-    initCircle{x=2,y=1.5,r=0.5,Vx=3,Vy=4,m=1,fill=false,name="A"}
-    initCircle{x=8,y=2,r=0.5,Vx=-3,Vy=4,m=1,fill=false,name="B"}
+    initCircle{x=2,y=2,r=0.5,Vx=5,Vy=0,m=1.5,fill=false,name="1"}
+    initCircle{x=8,y=2,r=0.5,Vx=-2,Vy=0,m=2,fill=false,name="2"}
 end

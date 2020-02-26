@@ -15,6 +15,6 @@ function computeForces(o)
 end
 
 function initObjects()
-    initBox{x=5,y=4,w=6,h=0.5,m=1e10,angle=math.rad(60),fill=false,static=false,name="A"}
+    initBox{x=5,y=4,w=6,h=0.5,m=1e4,angle=math.rad(40),fill=false,static=false,name="A"}
     initBox{x=5,y=6,Vy=-0.5,angle=math.rad(45),fill=false,name="B"}
 end
