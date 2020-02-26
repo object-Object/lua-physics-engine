@@ -38,11 +38,6 @@ function math.osign(x)
     end
 end
 
-function draw.arrow(x1,y1,x2,y2,headRadius,angle,color)
-    draw.line(x1,y1,x2,y2,color)
-    draw.fillpolygon(x2,y2,headRadius,3,angle,color)
-end
-
 function s(n)
     return n==1 and "" or "s"
 end

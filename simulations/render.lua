@@ -3,6 +3,11 @@ require("utils")
 
 local render={}
 
+render.drawArrow=function(x1,y1,x2,y2,headRadius,angle,color)
+    draw.line(x1,y1,x2,y2,color)
+    draw.fillpolygon(x2,y2,headRadius,3,angle,color)
+end
+
 render.getFocusOffset=function()
     if focusObject then
         return Vector(
@@ -135,7 +140,7 @@ render.render=function()
         if drawVectors and not object.hideVectors then
             local endX=posX+object.linearVelocity.x*(scale/7)
             local endY=posY+object.linearVelocity.y*(scale/7)
-            draw.arrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(object.linearVelocity.y,object.linearVelocity.x),draw.blue)
+            render.drawArrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(object.linearVelocity.y,object.linearVelocity.x),draw.blue)
             local netForce=Vector(0,0)
             local count,avgX,avgY=0,0,0
             for _,force in pairs(object.forces) do
@@ -143,7 +148,7 @@ render.render=function()
                 posY=object.position.y*scale+force.r.y*scale+focusOffset.y
                 endX=posX+force.f.x*object.shape.invMass*(scale/7)
                 endY=posY+force.f.y*object.shape.invMass*(scale/7)
-                draw.arrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(force.f.y,force.f.x),draw.red)
+                render.drawArrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(force.f.y,force.f.x),draw.red)
                 netForce=netForce+force.f
                 avgX=avgX+posX
                 avgY=avgY+posY
@@ -153,7 +158,7 @@ render.render=function()
             posY=avgY/count
             endX=posX+netForce.x*object.shape.invMass*(scale/7)
             endY=posY+netForce.y*object.shape.invMass*(scale/7)
-            draw.arrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(netForce.y,netForce.x),draw.darkgreen)
+            render.drawArrow(posX,fixY(posY),endX,fixY(endY),4,math.atan2(netForce.y,netForce.x),draw.darkgreen)
         end
     end
 
